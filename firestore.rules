@@ -1,0 +1,12 @@
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /transactions/{document=**} {
+    // allow read & write:                       
+    // auth only
+      allow create: if request.auth != null;
+    
+    // loggin user uid == document creator read & delete  
+      allow read, delete:if request.auth.uid == resource.auth.uid;
+    }
+  }
+}
